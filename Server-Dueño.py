@@ -29,7 +29,7 @@ def accept_incoming_connections():
           #     sock.send(bytes("asdasd","utf8"))
           #     print("--")
         
-          vidcap = cv2.VideoCapture('video.mp4')
+          vidcap = cv2.VideoCapture('VideoCompressorResizeCompressVideo2021_11_15_12_11_21.mp4')
           success,image = vidcap.read()
 
           count = 0
@@ -42,10 +42,11 @@ def accept_incoming_connections():
             count += 1
 
 
-          while count1 <= count:
+          while count1 < count:
+            
             for sock in addresses:
 
-              if  count1 <=count:
+              if  count1 < count:
 
                 path = "frame%d.jpg" % count1
                 file = open(path, 'rb')
@@ -60,7 +61,9 @@ def accept_incoming_connections():
                 file.close()  
                 
                 count1 += 1
-            time.sleep(0.5)
+              
+              
+            # time.sleep(0.5)
 
           # for j in range(count):
 
