@@ -1,3 +1,5 @@
+**/*.jpg
+!/server/*.jpg
 # JPEG
 *.jpg
 *.jpeg

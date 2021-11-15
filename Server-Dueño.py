@@ -18,6 +18,7 @@ def accept_incoming_connections():
         #Usamos un hilo y lo dirigimos a la funcion, le pasamos como argumentos el sokect del cliente
         Thread().start()
         print(len(addresses) )
+        print(addresses)
 
         vidcap = cv2.VideoCapture('video.mp4')
         success,image = vidcap.read()
@@ -36,6 +37,8 @@ def accept_incoming_connections():
         #   for sock in addresses:
 
         #     if  count1 <=count:
+
+        
 
         #       path = "frame%d.jpg" % count1
         #       file = open(path, 'rb')
