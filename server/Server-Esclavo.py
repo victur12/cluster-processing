@@ -4,29 +4,28 @@ import cv2
 
 
 def receive():
-    count = 0
     while True:
 
+        # msg = client_socket.recv(1024)
+        # msg = msg.decode('utf-8')
+        # print(msg)
         print ("1")
         path_rev = client_socket.recv(BUFSIZ)
-        path = path_rev.decode("utf-8")
+        path = path_rev.decode('utf-8')
+        print("path recibido")
         image=client_socket.recv(BUFSIZ)
         
-        # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        # cv2.imwrite("Hola2%d.jpg" %count, image)
-        # cv2.show("asd", image)
-
-        # count+=1
-        
+      
         print(path)
         file = open(path, "wb")
         file.write(image)
         file.close()
+        print("imagen guardada " ,path)
         
         
         
 
-        print ("asdasd")
+        # print ("asdasd")
 
 HOST = '127.0.0.1'
 PORT = 33000

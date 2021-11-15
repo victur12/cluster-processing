@@ -19,59 +19,66 @@ def accept_incoming_connections():
         Thread().start()
         print(len(addresses) )
         print(addresses)
+        print("Esperando")
 
-        vidcap = cv2.VideoCapture('video.mp4')
-        success,image = vidcap.read()
-
-        count = 0
-        count1=0
-        while success:
-
-          cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file      
+        if not len(addresses)<3:
+          print(len(addresses) )
+          #  if not len(addresses)<2:
+          #   for sock in addresses:
+          #     print(sock)
+          #     sock.send(bytes("asdasd","utf8"))
+          #     print("--")
+        
+          vidcap = cv2.VideoCapture('video.mp4')
           success,image = vidcap.read()
-          # print('Read a new frame: ', success)
-          count += 1
+
+          count = 0
+          count1=0
+          while success:
+
+            cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file      
+            success,image = vidcap.read()
+            # print('Read a new frame: ', success)
+            count += 1
 
 
-        # while count1 < count:
-        #   for sock in addresses:
+          while count1 <= count:
+            for sock in addresses:
 
-        #     if  count1 <=count:
+              if  count1 <=count:
+
+                path = "frame%d.jpg" % count1
+                file = open(path, 'rb')
+
+                sock.send(bytes(path, "utf8"))
+                print(path)
+
+                imagen = file.read(5242880)
+
+                sock.send(imagen)
+                print("imagen enviada")
+                file.close()  
+                
+                count1 += 1
+            time.sleep(0.5)
+
+          # for j in range(count):
+
+          #   print("frame%d.jpg" % j)
+          #   path = "frame%d.jpg" % j
+          #   file = open(path, 'rb')
+
+          #   client.send(bytes(path, "utf8"))
+
+          #   imagen = file.read(5242880)
+
+          #   client.send(imagen)
+          #   file.close()
+          #   time.sleep(0.1)
+          #   # print(j)
 
         
-
-        #       path = "frame%d.jpg" % count1
-        #       file = open(path, 'rb')
-
-        #       print("frame%d.jpg" % count1)
-
-        #       sock.send(bytes(path, "utf8"))
-        #       print(sock.send(bytes(path, "utf8")))
-
-        #       imagen = file.read(5242880)
-
-        #       sock.send(imagen)
-        #       file.close()  
-        #       count1 += 1
-          
-
-        for j in range(count):
-
-          print("frame%d.jpg" % j)
-          path = "frame%d.jpg" % j
-          file = open(path, 'rb')
-
-          client.send(bytes(path, "utf8"))
-
-          imagen = file.read(5242880)
-
-          client.send(imagen)
-          file.close()
-          time.sleep(0.1)
-          # print(j)
-
-      
-        print('Image saved')
+          print('Image saved')
         
 
 
