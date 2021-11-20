@@ -22,13 +22,7 @@ def accept_incoming_connections():
         print("Esperando")
 
         if not len(addresses)<3:
-          print(len(addresses) )
-          #  if not len(addresses)<2:
-          #   for sock in addresses:
-          #     print(sock)
-          #     sock.send(bytes("asdasd","utf8"))
-          #     print("--")
-        
+       
           vidcap = cv2.VideoCapture('VideoCompressorResizeCompressVideo2021_11_15_12_11_21.mp4')
           success,image = vidcap.read()
 
@@ -43,45 +37,38 @@ def accept_incoming_connections():
 
 
           while count1 < count:
-            
-            for sock in addresses:
+              
+              print ("a")
 
-              if  count1 < count:
+              for sock in addresses:
+                # print (sock)
 
-                path = "frame%d.jpg" % count1
-                file = open(path, 'rb')
+                if  count1 < count:
 
-                sock.send(bytes(path, "utf8"))
-                print(path)
+                  # sock.send(bytes("Hola", "utf8"))
 
-                imagen = file.read(5242880)
+                  path = "frame%d.jpg" % count1
+                  file = open(path, 'rb')
 
-                sock.send(imagen)
-                print("imagen enviada")
-                file.close()  
+                  sock.send(bytes(path, "utf8"))
+                  print(path)
+
+                  imagen = file.read(5242880)
+
+                  sock.send(imagen)
+                  print("imagen enviada")
+                  file.close()  
+                  
+                  count1 += 1
+
                 
-                count1 += 1
-              
-              
-            # time.sleep(0.5)
-
-          # for j in range(count):
-
-          #   print("frame%d.jpg" % j)
-          #   path = "frame%d.jpg" % j
-          #   file = open(path, 'rb')
-
-          #   client.send(bytes(path, "utf8"))
-
-          #   imagen = file.read(5242880)
-
-          #   client.send(imagen)
-          #   file.close()
-          #   time.sleep(0.1)
-          #   # print(j)
+                  
+          for sock in addresses:
+            sock.send(bytes("Imagen enviada", "utf8"))
+            print("enviado")
+                  
 
         
-          print('Image saved')
         
 
 
