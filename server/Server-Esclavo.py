@@ -2,6 +2,10 @@ from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 import cv2 
 import time
+import os
+import random
+
+
 
 
 def receive():
@@ -32,6 +36,7 @@ def receive():
                 Images.append(path)
                 print(len(Images))
                 
+                
 
             # print ("asdasd")
 
@@ -45,17 +50,34 @@ def receive():
                     imagen = cv2.imread(img)
                     imagen = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
                     cv2.imwrite(img,imagen)
+                    print(img + " filtrada a B/N")
+
+
+                # client_socket.send(bytes("Enviando", "utf8"))
+
+                # for img in Images:
+                #     file = open(img, 'rb')
+                #     client_socket.send(bytes(img, "utf8"))
+                #     print(img)
+                #     imagen = file.read(5242880)
+                #     client_socket.send(imagen)
+                #     print("enviada de regreso")
+                #     file.close()
+
+                #     time.sleep(random.randrange(1,3))
 
         else:
-
+            print("bye")
             for img in Images:
+                    file = open(img, 'rb')
+                    client_socket.send(bytes(img, "utf8"))
+                    print(img)
+                    imagen = file.read(5242880)
+                    client_socket.send(imagen)
+                    print("enviada de regreso")
+                    file.close()
 
-                file = open(img, 'rb')
-                image = file.read(BUFSIZ)
-
-                client_socket.send(imagen)
-                print("a fuera")
-                # time.sleep(1000)
+                    time.sleep(random.randrange(1,3))
 
 
 
