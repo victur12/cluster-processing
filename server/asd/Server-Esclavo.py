@@ -4,10 +4,8 @@ import cv2
 import time
 import os
 import random
-import zipfile
-import zlib
 
-compression = zipfile.ZIP_DEFLATED
+
 
 
 def receive():
@@ -23,6 +21,7 @@ def receive():
         if not not path:
 
             if not  path == "Imagen enviada": 
+                print ("1")
                 
                 print("path recibido")
                 image=client_socket.recv(BUFSIZ)
@@ -33,6 +32,7 @@ def receive():
                 file.write(image)
                 file.close()
                 print("imagen guardada " ,path)
+                
                 Images.append(path)
                 print(len(Images))
                 
@@ -53,49 +53,40 @@ def receive():
                     print(img + " filtrada a B/N")
 
 
-                # client_socket.send(bytes("Enviando", "utf8"))
-
-                nombre ="example%d.zip" %random.randrange(100)
-
-                zf = zipfile.ZipFile(nombre, mode="w")
+                client_socket.send(bytes("Enviando", "utf8"))
 
                 for img in Images:
 
-                    zf.write(img, compress_type=compression)
-                zf.close()
+                    file = open(img, 'rb')
 
-                print("Terminado")
+                    client_socket.send(bytes(img, "utf8"))
+                    print(img)
 
-                client_socket.send(bytes(nombre, "utf8"))
+                    imagen = file.read(5242880)
+                    client_socket.send(imagen)
 
-                file = open(nombre, 'rb')
-                archivo = file.read(BUFSIZ)
-                client_socket.send(archivo)
-                file.close()
-                # for img in Images:
+                    print("enviada de regreso")
+                    file.close()
 
-                #     file = open(img, 'rb')
+                    time.sleep(0)
 
-                #     client_socket.send(bytes(img, "utf8"))
-                #     print(img)
+                    client_socket.send(bytes("Enviando", "utf8"))
 
-                #     imagen = file.read(5242880)
-                #     client_socket.send(imagen)
-
-                #     print("enviada de regreso")
-                #     file.close()
-
-                #     # time.sleep(random.randrange(1,15))
-                #     time.sleep(0.100)
-
-                #     # client_socket.send(bytes("Enviando", "utf8"))
-
-                # # client_socket.send(bytes("Terminado", "utf8"))
+                client_socket.send(bytes("Terminado", "utf8"))
 
 
         else:
             print("bye")
-  
+            # for img in Images:
+            #         file = open(img, 'rb')
+            #         client_socket.send(bytes(img, "utf8"))
+            #         print(img)
+            #         imagen = file.read(5242880)
+            #         client_socket.send(imagen)
+            #         print("enviada de regreso")
+            #         file.close()
+
+            #         time.sleep(random.randrange(1,3))
             break
 
 
@@ -104,7 +95,7 @@ def receive():
 
 HOST = '127.0.0.1'
 PORT = 33000
-BUFSIZ = 15728640  
+BUFSIZ = 5242880 
 
 Images = []
 

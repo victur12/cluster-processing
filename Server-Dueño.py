@@ -5,8 +5,6 @@ import time
 import os
 
 
-
-
 def accept_incoming_connections():
 
     while True:
@@ -17,18 +15,24 @@ def accept_incoming_connections():
         print("%s:%s se conecto." % client_address)
 
         #Usamos un hilo y lo dirigimos a la funcion, le pasamos como argumentos el sokect del cliente
-        Thread().start()
+        Thread(target = handle_client, args=(client,)).start()
+        
         print(len(addresses) )
         print(addresses)
         print("Esperando")
 
-        if not len(addresses)<3:
+        
+              
+def handle_client(client):
+
+     if not len(addresses)<3:
        
           vidcap = cv2.VideoCapture('VideoCompressorResizeCompressVideo2021_11_15_12_11_21.mp4')
           success,image = vidcap.read()
 
           count = 0
           count1=0
+
           while success:
 
             cv2.imwrite("frame%d.jpg" % count, image)     # save frame as JPEG file      
@@ -38,8 +42,6 @@ def accept_incoming_connections():
 
 
           while count1 < count:
-              
-              print ("a")
 
               for sock in addresses:
                 # print (sock)
@@ -57,9 +59,9 @@ def accept_incoming_connections():
                   imagen = file.read(5242880)
 
                   sock.send(imagen)
-                  print("imagen enviada")
+                  # print("imagen enviada")
                   file.close() 
-                  os.remove(path) 
+                  # os.remove(path) 
   
                   count1 += 1
 
@@ -69,46 +71,75 @@ def accept_incoming_connections():
             for sock in addresses:
               sock.send(bytes("Imagen enviada", "utf8"))
               print("enviado")
-          
 
-
-          
           
           print("-----------------")
-          # msg = client.recv(BUFSIZ)           
-          # msg = msg.decode("utf8")
-          # print(msg)
 
-          # while msg == "Enviando":
-          
-          path_rev = client.recv(BUFSIZ)
-          path = path_rev.decode('utf-8')
-          print(path)
-            
-          print ("1")
-                  
-          print("path recibido")
-          image=client.recv(BUFSIZ)
-                  
-          print(path)
-          file = open(path, "wb")
-          file.write(image)
-          file.close()
-          print("imagen guardada " ,path)
+          # for sock in addresses:
+          #   msg = sock.recv(BUFSIZ)           
+          #   msg = msg.decode('utf-8')
+          #   print(msg)
+
+          # while True:
+          #   print("Recibiendo adentro")
+          #   for sock in addresses:
+
+          #     path_rev = sock.recv(100)
+          #     print(path_rev)
+
+          #     # print(sock)
+          #     path = path_rev.decode('utf-8')
                 
+                      
+          #     print("path recibido")
+          #     image=sock.recv(BUFSIZ)
+                      
+          #     print(path)
+          #     file = open(path, "wb")
+          #     file.write(image)
+          #     file.close()
+          #     print("imagen guardada " ,path)
+          #     time.sleep(0.500)
+          #     # msg = client.recv(BUFSIZ)           
+          #     # msg = msg.decode('utf-8')
+          #     # print(msg)
 
+          for sock in addresses:
 
+            # # while True:
+            path_rev = sock.recv(100)
+            print(path_rev)
+  
+            # # print(sock)
+            path = path_rev.decode('utf-8')
+              
+            archivo = sock.recv(BUFSIZ)
+
+            file = open(path, "wb")
+            file.write(archivo)
+            file.close()
+
+                    
+            # print("path recibido")
+            # image=sock.recv(BUFSIZ)
+                    
+            # print(path)
+            # file = open(path, "wb")
+            # file.write(image)
+            # file.close()
+
+          print("terminado")
           
-                  
 
-          
+
+      
                   
 addresses = {}
 
 
 HOST = '127.0.0.1'
 PORT = 33000
-BUFSIZ = 5242880 
+BUFSIZ = 15728640  
 
 serverMaestro = socket(AF_INET, SOCK_STREAM)
 serverMaestro.bind((HOST, PORT))
