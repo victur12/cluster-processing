@@ -3,6 +3,10 @@ from threading import Thread
 import cv2
 import time
 import os
+from zipfile import ZipFile
+import shutil
+import numpy as np
+import glob
 
 
 def accept_incoming_connections():
@@ -61,7 +65,7 @@ def handle_client(client):
                   sock.send(imagen)
                   # print("imagen enviada")
                   file.close() 
-                  # os.remove(path) 
+                  os.remove(path) 
   
                   count1 += 1
 
@@ -107,7 +111,7 @@ def handle_client(client):
           for sock in addresses:
 
             # # while True:
-            path_rev = sock.recv(100)
+            path_rev = sock.recv(13)
             print(path_rev)
   
             # # print(sock)
@@ -129,6 +133,24 @@ def handle_client(client):
             # file.close()
 
           print("terminado")
+          
+          for filename in glob.glob('*.zip'):
+            shutil.unpack_archive(filename)
+            os.remove(filename)
+          
+
+
+          frameSize = (426, 240)
+
+          out = cv2.VideoWriter('videoBlancoNegro.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 30, frameSize)
+
+          for filename in glob.glob('*.jpg'):
+              img = cv2.imread(filename)
+              out.write(img)
+              os.remove(filename)
+
+          out.release()
+          print("Video convertido a blanco/negro exitosamente :)")
           
 
 

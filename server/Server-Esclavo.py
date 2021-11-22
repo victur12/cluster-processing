@@ -55,14 +55,17 @@ def receive():
 
                 # client_socket.send(bytes("Enviando", "utf8"))
 
-                nombre ="example%d.zip" %random.randrange(100)
+                nombre ="example%d.zip" %random.randrange(10, 99)
 
                 zf = zipfile.ZipFile(nombre, mode="w")
 
                 for img in Images:
 
                     zf.write(img, compress_type=compression)
+                    os.remove(img)
                 zf.close()
+
+
 
                 print("Terminado")
 
@@ -72,6 +75,7 @@ def receive():
                 archivo = file.read(BUFSIZ)
                 client_socket.send(archivo)
                 file.close()
+                os.remove(nombre)
                 # for img in Images:
 
                 #     file = open(img, 'rb')
